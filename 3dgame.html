@@ -34,6 +34,10 @@
       
       var engine = new BABYLON.Engine(canvas, true);
       var keys = {};
+
+      var startTime = 0;
+      var timer = document.querySelector('#timer');
+
       window.addEventListener('keydown', function(e) {
         keys[e.key] = true;
       });
@@ -43,7 +47,7 @@
       var scene = new BABYLON.Scene(engine);
       var gravityVector = new BABYLON.Vector3(0, -9.81, 0);
       scene.enablePhysics(gravityVector, new BABYLON.CannonJSPlugin());
-      scene.clearColor = new BABYLON.Color3(0 ,5 ,30);
+      scene.clearColor = new BABYLON.Color3(10 ,5 ,0);
       
       scene.clearColor = new BABYLON.Color3.Purple();      
       //===TRACK CODE
@@ -70,7 +74,7 @@ var _yFn = function(t) {var fns = [function(t) {return (Math.pow((1-t),3)*0.4528
      BABYLON.SceneLoader.ImportMesh(null, "resources/", "speed.obj", scene, function(meshes) {
       var boostMesh = meshes[0], boosts = [];
       boostMesh.material = new BABYLON.StandardMaterial("boostMaterial", scene);
-      boostMesh.material.diffuseColor = new BABYLON.Color3(1, 1, 0);
+      boostMesh.material.diffuseColor = new BABYLON.Color3(0, 0, 0);
       boostMesh.scaling = new BABYLON.Vector3(5, 5, 5);
       boostMesh.setEnabled(false);
       function boostAt(xFn, zFn, t) {
@@ -82,14 +86,12 @@ var _yFn = function(t) {var fns = [function(t) {return (Math.pow((1-t),3)*0.4528
       }
 
       // Place boosts here
-        //boostAt(xFn, zFn, 0.13);
-        //boostAt(xFn, zFn, 0.07);
+      boostAt(xFn, zFn, 0.05);
+
       scene.registerAfterRender(function() {
       //Lots of code in this function
 
-      if (keys.w) {
-        if(!startTime){ startTIme = Date.now(); }
-      }
+
       boosts.forEach(function(boost, i){
       if(boost.intersectsMesh(playerSphere)){
       boost.dispose();
@@ -119,6 +121,7 @@ var _yFn = function(t) {var fns = [function(t) {return (Math.pow((1-t),3)*0.4528
           var left = BABYLON.Vector3.TransformCoordinates(forward, BABYLON.Matrix.RotationY((3 * Math.PI) / 2));
           var  right = BABYLON.Vector3.TransformCoordinates(forward, BABYLON.Matrix.RotationY(Math.PI / 2));
           if (keys.w) {
+            if(!startTime) {startTime = Date.now();}
             playerSphere.applyImpulse(forward, playerSphere.getAbsolutePosition());
           }
           if (keys.s) {
@@ -132,9 +135,13 @@ var _yFn = function(t) {var fns = [function(t) {return (Math.pow((1-t),3)*0.4528
           }
           var l = false;
   	      if (playerSphere.position.y < -10 && l == false) {
-  	        l = true;
   	        lost();
   	      }
+          if(startTime) {
+            timer.innerHTML = ((Date.now() - startTime) / 1000).toFixed(2).replace('.',':');
+          }
+          });
+
 //NEW CODE
           var currentT = tLookup(xFn, zFn, 500, playerSphere.position.x, playerSphere.position.z);
           var angle = (deriveAngle(currentT, xFn, zFn) - (Math.PI)); 
@@ -143,7 +150,7 @@ var _yFn = function(t) {var fns = [function(t) {return (Math.pow((1-t),3)*0.4528
             win();
           }
 //END NEW CODE
-      });
+      
       function drawPoint(x, z, zrot, scene) {
         var point = BABYLON.MeshBuilder.CreateBox('point', { 
         	width: 10, 
@@ -151,7 +158,7 @@ var _yFn = function(t) {var fns = [function(t) {return (Math.pow((1-t),3)*0.4528
         	depth: 12 
         }, scene);
         point.material = new BABYLON.StandardMaterial("pointMaterial", scene);
-        point.material.diffuseColor = new BABYLON.Color3(10, 10, 0);
+        point.material.diffuseColor = new BABYLON.Color3(20, 20, 0);
         point.position = new BABYLON.Vector3(x, 0.1, z);
         point.rotation.y = zrot;
         point.physicsImpostor = new BABYLON.PhysicsImpostor(point, BABYLON.PhysicsImpostor.BoxImpostor, {
@@ -218,8 +225,7 @@ var _yFn = function(t) {var fns = [function(t) {return (Math.pow((1-t),3)*0.4528
     }
      function wallAt(xFn, zFn, t, offset, scene)
       {
-      var startTime;
-      var timer = document.querySelector('#timer');
+      
 
       var wall = BABYLON.MeshBuilder.CreateBox('wall', {
         height: 30,
