@@ -74,7 +74,7 @@ var _yFn = function(t) {var fns = [function(t) {return (Math.pow((1-t),3)*0.4528
      BABYLON.SceneLoader.ImportMesh(null, "resources/", "speed.obj", scene, function(meshes) {
       var boostMesh = meshes[0], boosts = [];
       boostMesh.material = new BABYLON.StandardMaterial("boostMaterial", scene);
-      boostMesh.material.diffuseColor = new BABYLON.Color3(0, 0, 0);
+      boostMesh.material.diffuseColor = new BABYLON.Color3(1, 1, 0);
       boostMesh.scaling = new BABYLON.Vector3(5, 5, 5);
       boostMesh.setEnabled(false);
       function boostAt(xFn, zFn, t) {
@@ -83,7 +83,7 @@ var _yFn = function(t) {var fns = [function(t) {return (Math.pow((1-t),3)*0.4528
       newBoost.rotation.y = -derivAngle(t, xFn, zFn);
       newBoost.setEnabled(true);
       boosts.push(newBoost);
-      }
+}
 
       // Place boosts here
       boostAt(xFn, zFn, 0.05);
