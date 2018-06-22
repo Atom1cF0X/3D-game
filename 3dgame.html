@@ -82,8 +82,8 @@ var _yFn = function(t) {var fns = [function(t) {return (Math.pow((1-t),3)*0.4528
       }
 
       // Place boosts here
-        boostAt(xFn, zFn, 0.16);
         boostAt(xFn, zFn, 0.09);
+        boostAt(xFn, zFn, 0.07);
       scene.registerAfterRender(function() {
       //Lots of code in this function
 
@@ -102,7 +102,7 @@ var _yFn = function(t) {var fns = [function(t) {return (Math.pow((1-t),3)*0.4528
       });
       });
       });  
- 		//var camera = new BABYLON.ArcRotateCamera("Camera", 0, (3 * Math.PI) / 8, 20, playerSphere, scene);
+ 		var camera = new BABYLON.ArcRotateCamera("Camera", 0, (3 * Math.PI) / 8, 20, playerSphere, scene);
        	camera.attachControl(canvas, true);
        	var light = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(0, 1, 0), scene);
        rampAt(xFn, zFn, 0.07, -Math.PI / 4, scene); 
